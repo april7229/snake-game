@@ -27,6 +27,36 @@ const nextHead = state => state.snake.length == 0
 
 const nextSnake = state => willCrash( state )
     ? []
-    : ( willEat( state ) )
+    : ( willEat( state ) 
         ? [ nextHead( state ) ].concat( state.snake ) 
-        :[ nextHead(state)].concat(dropLast(state.snake))    
+        : [ nextHead( state ) ].concat( dropLast( state.snake ) ) )  
+        
+        
+
+const rndPos = table => ( {
+    x: rnd( 0 )( table.cols - 1 ),
+    y:rnd(0)(table.rows -1)
+} )  
+
+
+const intitialState = () => ( {
+    cols: 20,
+    rows: 14,
+    moves: [ EAST ],
+    snake: [],
+    apple:{x:16, y:2},
+} )
+
+const next = spec( {
+    rows: prop( 'rows' ),
+    cols: prop( 'cols' ),
+    moves: nextMoves,
+    snake: nextSnake,
+    apple:nextApple
+} )
+
+const enqueue = ( state, move ) => validMove( move )( state )
+? merge(state)({moves:state.moves.concat([move])})
+    : this.state
+
+    module.exports={EAST,NORTH,SOUTH,WEST,initialState, enqueue,next,}
